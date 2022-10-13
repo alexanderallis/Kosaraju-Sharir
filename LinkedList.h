@@ -17,12 +17,12 @@ public:
     void addTail(int);
     int pop();
     bool isEnd() const;
+    int hasNext() const;
     void clearList();
 
 private:
     Node* listPointer{};
     Node* tail{};
-    int hasNext() const;
 
 };
 

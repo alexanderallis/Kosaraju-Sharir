@@ -43,39 +43,45 @@ int dfsPostorder(std::vector<LinkedList> & tree, Stack * topologicalOrder, bool 
 
 }
 
-int * dfsSearch(std::vector<LinkedList> & tree, Stack * topologicalOrder, int numberOfVertices) {
+std::vector<LinkedList> * dfsSearch(std::vector<LinkedList> & tree, Stack * topologicalOrder, int numberOfVertices) {
 
+    auto * connectedCmptsList = new std::vector<LinkedList>;
 //    int idList[numberOfVertices];
-    int* idList = new int[numberOfVertices]();
+    bool* explored = new bool[numberOfVertices]();
     for(int i = 0; i < numberOfVertices; i++) {
-        idList[i] = -1;
+        explored[i] = false;
     }
 
     int root, parent;
 
     while(!topologicalOrder -> isEmpty()) {
         parent = topologicalOrder -> pop();
-        if(idList[parent] == -1) {
-            dfsConnections(tree, topologicalOrder, idList, parent, parent);  // modifies idList in place
+        if(!explored[parent]) {
+            auto * idList = new LinkedList;
+            connectedCmptsList -> push_back(*dfsConnections(tree, topologicalOrder, idList, explored, parent));
+//            dfsConnections(tree, topologicalOrder, idList, parent, numOfConnectedCompts);  // modifies idList in place
         }
     }
 
-    return idList;
+    return connectedCmptsList;
 
 }
 
-int * dfsConnections(std::vector<LinkedList> & tree, Stack * topologicalOrder, int * idList, int root, const int parent) {
+LinkedList * dfsConnections(std::vector<LinkedList> & tree, Stack * topologicalOrder, LinkedList * idList, bool * explored, int root) {
 
     //mark u as explored and add u to r
-    idList[root] = parent;
+    idList -> add(root);
+    explored[root] = true;
+//    idList[root] = parent;
     int root2;
     // for each edge (u,v) incident to u
     while(!tree.at(root).isEnd()) {
         // If v is not marked "explored" then
         root2 = tree.at(root).pop();
-        if(idList[root2] == -1) {
+        if(!explored[root2]) {
             // recursively invoke getReversePostorder(v)
-            dfsConnections(tree, topologicalOrder, idList, root2, parent);
+            dfsConnections(tree, topologicalOrder, idList, explored, root2);
+//            explored[root2] = true;
         }
     }
 

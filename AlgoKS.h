@@ -11,9 +11,9 @@ Stack * getReversePostorder(std::vector<LinkedList>, int);
 
 int dfsPostorder(std::vector<LinkedList> &tree, Stack *topologicalOrder, bool *explored, int root);
 
-int * dfsSearch(std::vector<LinkedList> &, Stack *, int);
+std::vector<LinkedList> * dfsSearch(std::vector<LinkedList> &, Stack *, int);
 
-int * dfsConnections(std::vector<LinkedList> &, Stack *, int *, int, int);
+LinkedList * dfsConnections(std::vector<LinkedList> &, Stack *, LinkedList *, bool *, int);
 
 std::vector<std::pair<int, int>> getPairsOfGReverse(std::vector<std::pair<int, int>> &);
 

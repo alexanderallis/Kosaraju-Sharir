@@ -20,7 +20,26 @@ int main() {
 
     Stack * topologicalOrder = getReversePostorder(treeReverse, numberOfVertices);
 
-    int * idList = dfsSearch(tree, topologicalOrder, numberOfVertices);
+    std::vector<LinkedList> * idList = dfsSearch(tree, topologicalOrder, numberOfVertices);
+
+    // OUTPUT - BASIC
+    unsigned int numStronglyConnCmpts = idList -> size();
+    std::cout << "The graph has " << numStronglyConnCmpts << " Strongly Connected Components." << std::endl;
+    for(int i = 0; i < numStronglyConnCmpts; i++) {
+        std::cout << "Strongly Connected Component #" << i << ": ";
+        while(!idList -> at(i).isEnd()) {
+            std::cout << idList -> at(i).pop();
+            if(idList -> at(i).isEnd()) {
+                std::cout << ". " << std::endl;
+            }
+            else {
+                std::cout << ", ";
+            }
+        }
+    }
+
+    // OUTPUT - KERNEL
+
 
     return 0;
 }
