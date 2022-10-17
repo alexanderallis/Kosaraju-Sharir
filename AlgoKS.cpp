@@ -43,7 +43,7 @@ int dfsPostorder(std::vector<LinkedList> & tree, Stack * topologicalOrder, bool 
 
 }
 
-int dfsSearch(std::vector<LinkedList> & tree, Stack * topologicalOrder, std::vector<LinkedList> * connectedCmptsList, int * idList, int numberOfVertices) {
+int dfsSearch(std::vector<LinkedList> & tree, Stack * topologicalOrder, std::vector<LinkedList> * connectedCmptsList, int * idList, int numberOfVertices, std::vector<std::pair<int, int>> & kernelPairs) {
 
     int parent;
     int idCounter = 0;
@@ -58,7 +58,7 @@ int dfsSearch(std::vector<LinkedList> & tree, Stack * topologicalOrder, std::vec
         parent = topologicalOrder -> pop();
         if(!explored[parent]) {
             auto * connectionList = new LinkedList;
-            connectedCmptsList -> push_back(*dfsConnections(tree, topologicalOrder, connectionList, idList, explored, parent, idCounter));
+            connectedCmptsList -> push_back(*dfsConnections(tree, topologicalOrder, connectionList, idList, explored, parent, idCounter, kernelPairs));
             idCounter++;
         }
     }
@@ -67,7 +67,7 @@ int dfsSearch(std::vector<LinkedList> & tree, Stack * topologicalOrder, std::vec
 
 }
 
-LinkedList * dfsConnections(std::vector<LinkedList> & tree, Stack * topologicalOrder, LinkedList * connectionList, int * idList, bool * explored, int root, int idCounter) {
+LinkedList * dfsConnections(std::vector<LinkedList> & tree, Stack * topologicalOrder, LinkedList * connectionList, int * idList, bool * explored, int root, int idCounter, std::vector<std::pair<int, int>> & kernelPairs) {
 
     //mark u as explored and add u to r
     connectionList -> add(root);
@@ -80,7 +80,13 @@ LinkedList * dfsConnections(std::vector<LinkedList> & tree, Stack * topologicalO
         root2 = tree.at(root).pop();
         if(!explored[root2]) {
             // recursively invoke
-            dfsConnections(tree, topologicalOrder, connectionList, idList, explored, root2, idCounter);
+            dfsConnections(tree, topologicalOrder, connectionList, idList, explored, root2, idCounter, kernelPairs);
+        }
+        else {  // add to kernel
+            if(idList[root2] != idCounter) {
+                kernelPairs.emplace_back(idCounter, idList[root2]);
+            }
+
         }
     }
     tree.at(root).reset();  // clean up for future use
