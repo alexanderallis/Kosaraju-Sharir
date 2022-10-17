@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
-#include "read_file.h"
+#include <sstream>
+#include <utility>
+
 #include "adjacency_list.h"
 #include "AlgoKS.h"
 
@@ -8,10 +10,38 @@ int main() {
 
     std::vector<std::pair<int, int>> pairs;
 
-    int numberOfVertices;
-    int numberOfEdges;
+//    int numberOfVertices;
+//    int numberOfEdges;
+//    readFile("input.txt", pairs, numberOfVertices, numberOfEdges);
 
-    readFile("input.txt", pairs, numberOfVertices, numberOfEdges);
+    // Get input from stdin
+    std::string input;
+    std::string line;
+    getline(std::cin, line);  // get vertices
+    int numberOfVertices = stoi(line);
+    getline(std::cin, line);  // get edges
+    int numberOfEdges = stoi(line);
+
+    std::stringstream sStream;
+    std::string vectorA;  // each vertex
+    std::string vectorB;
+
+    getline(std::cin, line);
+
+    while (line != "finish") {
+        if (std::cin.fail()) break;
+        sStream << line;
+        while(!sStream.eof()) {  // Loop through numbers
+            if(!sStream.fail()) {
+                sStream >> vectorA;
+                sStream >> vectorB;
+                pairs.emplace_back(std::stoi(vectorA), std::stoi(vectorB));
+            }
+        }
+        sStream.str(std::string());  // Clear string
+        sStream.clear();  // Clear the state flags for eof()
+        getline(std::cin, line);
+    }
 
     std::vector<std::pair<int, int>> reversePairs = getPairsOfGReverse(pairs);
 
@@ -43,49 +73,14 @@ int main() {
         connectedCmptsList -> at(i).reset();  // reset Linked list pointer to head for further use.
     }
 
-    // OUTPUT - KERNEL
+    // OUTPUT - KERNEL GRAPH
     std::cout << std::endl << "Kernel Graph" << std::endl;
     std::cout << connectedCmptsList->size() << std::endl;
     std::cout << kernelGraph.size() << std::endl;
     for(auto & i : kernelGraph) {
-        std::cout << i.first << ", " << i.second << std::endl;
+        std::cout << i.first << " " << i.second << std::endl;
     }
 
-//    int v;
-//    int u;
-//    int id;
-//    unsigned int numConnectedCmpts = connectedCmptsList -> size();
-//    bool found = false;
-//    std::vector<std::pair<int, int>> kernelPairs;
-//
-//    for(int i = 0; i < numConnectedCmpts; i++) {
-//        while(!connectedCmptsList -> at(i).isEnd()) {
-//            v = connectedCmptsList -> at(i).pop();
-//            while(!tree.at(v).isEnd()) {
-//                u = tree.at(v).pop();
-//                id = idList[u];
-//                if(i != id) {
-//                    for(auto & kernelPair : kernelPairs) {
-//                        if(kernelPair.first == i) {
-//                            if(kernelPair.second == id) {
-//                                found = true;
-//                                break; // do nothing if found parallel edge
-//                            }
-//                        }
-//                    }
-//                    if(!found) kernelPairs.emplace_back(i, id);
-//                }
-//            }
-//        }
-//    }
-
-//    std::cout << std::endl;
-//    std::cout << "Kernel Graph" << std::endl;
-//    std::cout << connectedCmptsList -> size() << std::endl;
-//    std::cout << kernelPairs.size() << std::endl;
-//    for(auto & kernelPair : kernelPairs) {
-//        std::cout << kernelPair.first << " " << kernelPair.second << std::endl;
-//    }
 
     return 0;
 }

@@ -50,7 +50,7 @@ int readFile(const std::string & fileName, std::vector<std::pair<int, int>> & tr
             sStream << line;
             while(!sStream.eof()) {  // Loop through numbers
                 if(!sStream.fail()) {
-                    sStream >>vectorA;
+                    sStream >> vectorA;
                     sStream >> vectorB;
                     treePairs.emplace_back(std::stoi(vectorA), std::stoi(vectorB));
                 }
