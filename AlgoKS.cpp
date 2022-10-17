@@ -8,7 +8,7 @@
 
 Stack * getReversePostorder(std::vector<LinkedList> tree, const int numberOfVertices) {
 
-    auto * topologicalOrder = new Stack;
+    auto * topologicalOrder = new Stack(numberOfVertices);
     bool explored[numberOfVertices];
     for(int i = 0; i < numberOfVertices; i++) {
         explored[i] = false;
@@ -43,58 +43,58 @@ int dfsPostorder(std::vector<LinkedList> & tree, Stack * topologicalOrder, bool 
 
 }
 
-std::vector<LinkedList> * dfsSearch(std::vector<LinkedList> & tree, Stack * topologicalOrder, int numberOfVertices) {
+int dfsSearch(std::vector<LinkedList> & tree, Stack * topologicalOrder, std::vector<LinkedList> * connectedCmptsList, int * idList, int numberOfVertices) {
 
-    auto * connectedCmptsList = new std::vector<LinkedList>;
-//    int idList[numberOfVertices];
+    int parent;
+    int idCounter = 0;
+//    auto * idList = new int[numberOfVertices];
+//    auto * connectedCmptsList = new std::vector<LinkedList>;
     bool* explored = new bool[numberOfVertices]();
     for(int i = 0; i < numberOfVertices; i++) {
         explored[i] = false;
     }
 
-    int root, parent;
-
     while(!topologicalOrder -> isEmpty()) {
         parent = topologicalOrder -> pop();
         if(!explored[parent]) {
-            auto * idList = new LinkedList;
-            connectedCmptsList -> push_back(*dfsConnections(tree, topologicalOrder, idList, explored, parent));
-//            dfsConnections(tree, topologicalOrder, idList, parent, numOfConnectedCompts);  // modifies idList in place
+            auto * connectionList = new LinkedList;
+            connectedCmptsList -> push_back(*dfsConnections(tree, topologicalOrder, connectionList, idList, explored, parent, idCounter));
+            idCounter++;
         }
     }
 
-    return connectedCmptsList;
+    return 0;
 
 }
 
-LinkedList * dfsConnections(std::vector<LinkedList> & tree, Stack * topologicalOrder, LinkedList * idList, bool * explored, int root) {
+LinkedList * dfsConnections(std::vector<LinkedList> & tree, Stack * topologicalOrder, LinkedList * connectionList, int * idList, bool * explored, int root, int idCounter) {
 
     //mark u as explored and add u to r
-    idList -> add(root);
+    connectionList -> add(root);
+    idList[root] = idCounter;
     explored[root] = true;
-//    idList[root] = parent;
     int root2;
     // for each edge (u,v) incident to u
     while(!tree.at(root).isEnd()) {
         // If v is not marked "explored" then
         root2 = tree.at(root).pop();
         if(!explored[root2]) {
-            // recursively invoke getReversePostorder(v)
-            dfsConnections(tree, topologicalOrder, idList, explored, root2);
-//            explored[root2] = true;
+            // recursively invoke
+            dfsConnections(tree, topologicalOrder, connectionList, idList, explored, root2, idCounter);
         }
     }
-
-    return idList;
+    tree.at(root).reset();  // clean up for future use
+    return connectionList;
 
 }
 
 std::vector<std::pair<int, int>> getPairsOfGReverse(std::vector<std::pair<int, int>> & g) {
 
     std::vector<std::pair<int, int>> gR;
+    gR.reserve(g.size());
 
-    for(int i = 0; i < g.size(); i++) {
-        gR.emplace_back(g.at(i).second, g.at(i).first);
+    for(auto & i : g) {
+        gR.emplace_back(i.second, i.first);
     }
 
     return gR;

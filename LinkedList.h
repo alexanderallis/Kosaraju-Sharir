@@ -17,13 +17,14 @@ public:
     void addTail(int);
     int pop();
     bool isEnd() const;
-    int hasNext() const;
+    int reset();
     void clearList();
 
 private:
     Node* listPointer{};
+    Node* head{};
     Node* tail{};
-
+    int hasNext() const;
 };
 
 #endif //KOSARAJU_SHARIR_LINKEDLIST_H

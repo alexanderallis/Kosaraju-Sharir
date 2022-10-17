@@ -9,6 +9,7 @@
 
 LinkedList::LinkedList() {
     this -> listPointer = nullptr;
+    this -> head = nullptr;
     this -> tail = nullptr;
 }
 
@@ -20,10 +21,14 @@ LinkedList::LinkedList(std::vector<int> list) {
 
 void LinkedList::add(int data) {
     Node* nodePointer = new Node;
-    if (listPointer == nullptr) this -> tail = nodePointer;  // if first node created, set tail
-    nodePointer->data = data;
-    nodePointer->next = listPointer;
-    listPointer = nodePointer;
+    if (listPointer == nullptr){
+        this -> tail = nodePointer;  // if first node created, set tail
+        this -> head = nodePointer;  // if first node created, set head
+    }
+    nodePointer -> data = data;
+    nodePointer -> next = listPointer;
+    this -> listPointer = nodePointer;
+    this -> head = nodePointer;
 }
 
 void LinkedList::addTail(int data) {
@@ -54,6 +59,10 @@ int LinkedList::pop() {
     Node* tmp = listPointer;
     listPointer = listPointer -> next;
     return (tmp -> data);
+}
+
+int LinkedList::reset() {
+    this -> listPointer = this -> head;
 }
 
 void LinkedList::clearList() {

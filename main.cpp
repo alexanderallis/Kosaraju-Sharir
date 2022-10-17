@@ -18,28 +18,66 @@ int main() {
     std::vector<LinkedList> tree = makeAdjacencyList(pairs);
     std::vector<LinkedList> treeReverse = makeAdjacencyList(reversePairs);
 
+    // K-S Algorithm
     Stack * topologicalOrder = getReversePostorder(treeReverse, numberOfVertices);
-
-    std::vector<LinkedList> * idList = dfsSearch(tree, topologicalOrder, numberOfVertices);
+    auto * connectedCmptsList = new std::vector<LinkedList>;
+    auto * idList = new int[numberOfVertices];
+    dfsSearch(tree, topologicalOrder, connectedCmptsList, idList, numberOfVertices);
+    // End K-S Algorithm
 
     // OUTPUT - BASIC
-    unsigned int numStronglyConnCmpts = idList -> size();
+    unsigned int numStronglyConnCmpts = connectedCmptsList -> size();
     std::cout << "The graph has " << numStronglyConnCmpts << " Strongly Connected Components." << std::endl;
     for(int i = 0; i < numStronglyConnCmpts; i++) {
         std::cout << "Strongly Connected Component #" << i << ": ";
-        while(!idList -> at(i).isEnd()) {
-            std::cout << idList -> at(i).pop();
-            if(idList -> at(i).isEnd()) {
+        while(!connectedCmptsList -> at(i).isEnd()) {
+            std::cout << connectedCmptsList -> at(i).pop();
+            if(connectedCmptsList -> at(i).isEnd()) {
                 std::cout << ". " << std::endl;
             }
             else {
                 std::cout << ", ";
             }
         }
+        connectedCmptsList -> at(i).reset();  // reset Linked list pointer to head for further use.
     }
 
     // OUTPUT - KERNEL
+    int v;
+    int u;
+    int id;
+    unsigned int numConnectedCmpts = connectedCmptsList -> size();
+    bool found = false;
+    std::vector<std::pair<int, int>> kernelPairs;
 
+    for(int i = 0; i < numConnectedCmpts; i++) {
+        while(!connectedCmptsList -> at(i).isEnd()) {
+            v = connectedCmptsList -> at(i).pop();
+            while(!tree.at(v).isEnd()) {
+                u = tree.at(v).pop();
+                id = idList[u];
+                if(i != id) {
+                    for(auto & kernelPair : kernelPairs) {
+                        if(kernelPair.first == i) {
+                            if(kernelPair.second == id) {
+                                found = true;
+                                break; // do nothing if found parallel edge
+                            }
+                        }
+                    }
+                    if(!found) kernelPairs.emplace_back(i, id);
+                }
+            }
+        }
+    }
+
+    std::cout << std::endl;
+    std::cout << "Kernel Graph" << std::endl;
+    std::cout << connectedCmptsList -> size() << std::endl;
+    std::cout << kernelPairs.size() << std::endl;
+    for(auto & kernelPair : kernelPairs) {
+        std::cout << kernelPair.first << " " << kernelPair.second << std::endl;
+    }
 
     return 0;
 }
