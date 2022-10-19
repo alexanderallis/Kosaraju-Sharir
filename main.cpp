@@ -2,7 +2,7 @@
 #include <vector>
 #include <utility>
 
-#include "read_file.h"
+#include "read_input.h"
 #include "adjacency_list.h"
 #include "AlgoKS.h"
 
@@ -34,7 +34,7 @@ int main() {
     int numberOfEdges = 0;
 
     // read file
-    readFile("input.txt", pairs, numberOfVertices, numberOfEdges);
+//    readFile("input.txt", pairs, numberOfVertices, numberOfEdges);
     getPairsFromStdIn(pairs, numberOfVertices, numberOfEdges);
     std::vector<std::pair<int, int>> reversePairs = getPairsOfGReverse(pairs);
 

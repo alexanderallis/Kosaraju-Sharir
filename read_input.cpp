@@ -7,7 +7,7 @@
 #include <utility>
 #include <vector>
 
-#include "read_file.h"
+#include "read_input.h"
 
 using std::ifstream;
 
@@ -23,7 +23,7 @@ using std::ifstream;
 
 int getPairsFromStdIn(std::vector<std::pair<int, int>> & pairs, int & numberOfVertices, int & numberOfEdges) {
 
-    std::cout << "Please input tree, type \"finish\" with a carriage return on the last line to submit" << std::endl;
+    std::cout << "Please input tree, and press \"enter\"." << std::endl;
 
     // Get input from stdin
     std::string input;
@@ -37,10 +37,8 @@ int getPairsFromStdIn(std::vector<std::pair<int, int>> & pairs, int & numberOfVe
     std::string vectorA;  // each vertex
     std::string vectorB;
 
-    getline(std::cin, line);
-
-//    while (line != "finish") {
-    for(int i = 0; i < numberOfEdges - 1; i++) {
+    for(int i = 0; i < numberOfEdges; i++) {
+        getline(std::cin, line);
         if (std::cin.fail()) break;
         sStream << line;
         while(!sStream.eof()) {  // Loop through numbers
@@ -52,7 +50,6 @@ int getPairsFromStdIn(std::vector<std::pair<int, int>> & pairs, int & numberOfVe
         }
         sStream.str(std::string());  // Clear string
         sStream.clear();  // Clear the state flags for eof()
-        getline(std::cin, line);
     }
 
     return 0;

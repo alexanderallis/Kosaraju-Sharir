@@ -20,9 +20,9 @@ std::vector<LinkedList> makeAdjacencyList(const std::vector<std::pair<int, int>>
 
     std::vector<LinkedList> adjList(numberOfVertices);
 
-    for(int i = 0; i < listSize; i++) {
-        index = pairs.at(i).first;
-        adjList.at(index).add(pairs.at(i).second);
+    for(const auto & pair : pairs) {
+        index = pair.first;
+        adjList.at(index).add(pair.second);
     }
 
     return adjList;
