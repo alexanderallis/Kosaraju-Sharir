@@ -113,12 +113,12 @@ LinkedList * dfsConnections(std::vector<LinkedList> & graph, Stack * reversePost
     idList[root] = idCounter;
     isExplored[root] = true;
     int root2;
-    // for each edge (u,v) incident to u
+    // For each edge connected to root...
     while(!graph.at(root).isEnd()) {
-        // If v is not marked "isExplored" then
+        // ...if not explored...
         root2 = graph.at(root).pop();
         if(!isExplored[root2]) {
-            // recursively invoke
+            // ...recursively invoke dfs.
             dfsConnections(graph, reversePostorder, stronglyConnectedList, idList, isExplored, root2, idCounter, kernelPairs, kernelIsExplored);
         }
         else {  // add to kernel graph

@@ -5,6 +5,13 @@
 #include "adjacency_list.h"
 #include "LinkedList.h"
 
+/*
+ * Makes an adjacency list of the graph from a list of pairs.
+ * Args:
+ *  pairs: a list of edges
+ *  numberOfVertices
+ * Returns: an adjacency list of the graph
+ */
 std::vector<LinkedList> makeAdjacencyList(const std::vector<std::pair<int, int>>& pairs, int numberOfVertices) {
 
 
