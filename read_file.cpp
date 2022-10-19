@@ -30,7 +30,8 @@ int getPairsFromStdIn(std::vector<std::pair<int, int>> & pairs, int & numberOfVe
 
     getline(std::cin, line);
 
-    while (line != "finish") {
+//    while (line != "finish") {
+    for(int i = 0; i < numberOfEdges - 1; i++) {
         if (std::cin.fail()) break;
         sStream << line;
         while(!sStream.eof()) {  // Loop through numbers

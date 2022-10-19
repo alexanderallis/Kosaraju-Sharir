@@ -17,7 +17,7 @@ public:
     void addTail(int);
     int pop();
     bool isEnd() const;
-    int reset();
+    void reset();
     void clearList();
 
 private:

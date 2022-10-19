@@ -9,9 +9,9 @@
 
 Stack * getReversePostorder(std::vector<LinkedList>, int);
 
-int dfsPostorder(std::vector<LinkedList> &tree, Stack *topologicalOrder, bool *explored, int root);
+int dfsPostorder(std::vector<LinkedList> &graph, Stack *reversePostorder, bool *isExplored, int root);
 
-int dfsSearch(std::vector<LinkedList> &, Stack *, std::vector<LinkedList> *, int *, int, std::vector<std::pair<int, int>> &);
+int dfsSearchByRevPostorder(std::vector<LinkedList> &graph, Stack *reversePostorder, std::vector<LinkedList> *connectedCmptsList, int *idList, int numberOfVertices, std::vector<std::pair<int, int>> &kernelEdges);
 
 LinkedList * dfsConnections(std::vector<LinkedList> &, Stack *, LinkedList *, int *, bool *, int, int, std::vector<std::pair<int, int>> &, bool *);
 

@@ -6,16 +6,39 @@
 #include "adjacency_list.h"
 #include "AlgoKS.h"
 
+/*
+ *  Alexander Allis
+ *  Kosaraju-Shrarir Algorithm
+ *  This program determines the strongly connected components in a tree
+ *  and returns a list of the strongly connected components with their kernel graph.
+ *
+ *  To Compile:
+ *  Run "cmake ." in root directory
+ *  Run "make"
+ *  Run "./Gale_Shapely [Program Type] [Male Preferences] [Female Preferences] [Output File]"
+ *
+ *  To Run:
+ *  [# of vertices]
+ *  [# of edges]
+ *  [a1 b1]
+ *  ...
+ *  [an bn]
+ *
+ *  The edges go from ax -> bx
+ */
+
 int main() {
 
     std::vector<std::pair<int, int>> pairs;
     int numberOfVertices = 0;
     int numberOfEdges = 0;
 
+    // read file
     readFile("input.txt", pairs, numberOfVertices, numberOfEdges);
-//    getPairsFromStdIn(pairs, numberOfVertices, numberOfEdges);
+    getPairsFromStdIn(pairs, numberOfVertices, numberOfEdges);
     std::vector<std::pair<int, int>> reversePairs = getPairsOfGReverse(pairs);
 
+    // construct tree
     std::vector<LinkedList> tree = makeAdjacencyList(pairs, numberOfVertices);
     std::vector<LinkedList> treeReverse = makeAdjacencyList(reversePairs, numberOfVertices);
 
@@ -24,10 +47,10 @@ int main() {
     auto * connectedCmptsList = new std::vector<LinkedList>;
     auto * idList = new int[numberOfVertices] {0};
     std::vector<std::pair<int, int>> kernelGraph;
-    dfsSearch(tree, reversePostorder, connectedCmptsList, idList, numberOfVertices, kernelGraph);
+    dfsSearchByRevPostorder(tree, reversePostorder, connectedCmptsList, idList, numberOfVertices, kernelGraph);
     // End K-S Algorithm
 
-    // OUTPUT - BASIC
+    // OUTPUT - STRONGLY CONNECTED COMPONENTS
     unsigned int numStronglyConnCmpts = connectedCmptsList -> size();
     std::cout << "The graph has " << numStronglyConnCmpts << " Strongly Connected Components." << std::endl;
     for(int i = 0; i < numStronglyConnCmpts; i++) {
@@ -51,7 +74,6 @@ int main() {
     for(auto & i : kernelGraph) {
         std::cout << i.first << " " << i.second << std::endl;
     }
-
 
     return 0;
 }

@@ -3,7 +3,9 @@
 //
 
 #include "Node.h"
-
+/*
+ * A single node in the linked list.
+ */
 Node::Node() {
     data = 0;
     next = nullptr;
