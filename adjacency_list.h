@@ -7,5 +7,5 @@
 #include <vector>
 #include "LinkedList.h"
 
-std::vector<LinkedList> makeAdjacencyList(const std::vector<std::pair<int, int>>&);
+std::vector<LinkedList> makeAdjacencyList(const std::vector<std::pair<int, int>>&, int);
 #endif //KOSARAJU_SHARIR_ADJACENCY_LIST_H

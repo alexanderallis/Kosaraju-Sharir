@@ -7,4 +7,6 @@
 
 int readFile(const std::string & , std::vector<std::pair<int, int>> & , int &, int &);
 
+int getPairsFromStdIn(std::vector<std::pair<int, int>> &, int &, int &);
+
 #endif //KOSARAJU_SHARIR_READ_FILE_H

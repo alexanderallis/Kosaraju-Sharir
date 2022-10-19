@@ -1,59 +1,30 @@
 #include <iostream>
 #include <vector>
-#include <sstream>
 #include <utility>
 
+#include "read_file.h"
 #include "adjacency_list.h"
 #include "AlgoKS.h"
 
 int main() {
 
     std::vector<std::pair<int, int>> pairs;
+    int numberOfVertices = 0;
+    int numberOfEdges = 0;
 
-//    int numberOfVertices;
-//    int numberOfEdges;
-//    readFile("input.txt", pairs, numberOfVertices, numberOfEdges);
-
-    // Get input from stdin
-    std::string input;
-    std::string line;
-    getline(std::cin, line);  // get vertices
-    int numberOfVertices = stoi(line);
-    getline(std::cin, line);  // get edges
-    int numberOfEdges = stoi(line);
-
-    std::stringstream sStream;
-    std::string vectorA;  // each vertex
-    std::string vectorB;
-
-    getline(std::cin, line);
-
-    while (line != "finish") {
-        if (std::cin.fail()) break;
-        sStream << line;
-        while(!sStream.eof()) {  // Loop through numbers
-            if(!sStream.fail()) {
-                sStream >> vectorA;
-                sStream >> vectorB;
-                pairs.emplace_back(std::stoi(vectorA), std::stoi(vectorB));
-            }
-        }
-        sStream.str(std::string());  // Clear string
-        sStream.clear();  // Clear the state flags for eof()
-        getline(std::cin, line);
-    }
-
+    readFile("input.txt", pairs, numberOfVertices, numberOfEdges);
+//    getPairsFromStdIn(pairs, numberOfVertices, numberOfEdges);
     std::vector<std::pair<int, int>> reversePairs = getPairsOfGReverse(pairs);
 
-    std::vector<LinkedList> tree = makeAdjacencyList(pairs);
-    std::vector<LinkedList> treeReverse = makeAdjacencyList(reversePairs);
+    std::vector<LinkedList> tree = makeAdjacencyList(pairs, numberOfVertices);
+    std::vector<LinkedList> treeReverse = makeAdjacencyList(reversePairs, numberOfVertices);
 
     // K-S Algorithm
-    Stack * topologicalOrder = getReversePostorder(treeReverse, numberOfVertices);
+    Stack * reversePostorder = getReversePostorder(treeReverse, numberOfVertices);
     auto * connectedCmptsList = new std::vector<LinkedList>;
-    auto * idList = new int[numberOfVertices];
+    auto * idList = new int[numberOfVertices] {0};
     std::vector<std::pair<int, int>> kernelGraph;
-    dfsSearch(tree, topologicalOrder, connectedCmptsList, idList, numberOfVertices, kernelGraph);
+    dfsSearch(tree, reversePostorder, connectedCmptsList, idList, numberOfVertices, kernelGraph);
     // End K-S Algorithm
 
     // OUTPUT - BASIC

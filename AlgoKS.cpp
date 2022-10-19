@@ -38,6 +38,7 @@ int dfsPostorder(std::vector<LinkedList> & tree, Stack * topologicalOrder, bool 
 //            explored[root] = true;
         }
     }
+
     topologicalOrder -> push(root);
     return root;
 
@@ -53,13 +54,18 @@ int dfsSearch(std::vector<LinkedList> & tree, Stack * topologicalOrder, std::vec
     for(int i = 0; i < numberOfVertices; i++) {
         explored[i] = false;
     }
+    bool* kernelExplored = new bool[numberOfVertices]();
+    for(int i = 0; i < numberOfVertices; i++) {
+        explored[i] = false;
+    }
 
     while(!topologicalOrder -> isEmpty()) {
         parent = topologicalOrder -> pop();
         if(!explored[parent]) {
             auto * connectionList = new LinkedList;
-            connectedCmptsList -> push_back(*dfsConnections(tree, topologicalOrder, connectionList, idList, explored, parent, idCounter, kernelPairs));
+            connectedCmptsList -> push_back(*dfsConnections(tree, topologicalOrder, connectionList, idList, explored, parent, idCounter, kernelPairs, kernelExplored));
             idCounter++;
+            *kernelExplored = {false};  // reset kernel explored for each idCounter
         }
     }
 
@@ -67,7 +73,7 @@ int dfsSearch(std::vector<LinkedList> & tree, Stack * topologicalOrder, std::vec
 
 }
 
-LinkedList * dfsConnections(std::vector<LinkedList> & tree, Stack * topologicalOrder, LinkedList * connectionList, int * idList, bool * explored, int root, int idCounter, std::vector<std::pair<int, int>> & kernelPairs) {
+LinkedList * dfsConnections(std::vector<LinkedList> & tree, Stack * topologicalOrder, LinkedList * connectionList, int * idList, bool * explored, int root, int idCounter, std::vector<std::pair<int, int>> & kernelPairs, bool * kernelExplored) {
 
     //mark u as explored and add u to r
     connectionList -> add(root);
@@ -80,11 +86,12 @@ LinkedList * dfsConnections(std::vector<LinkedList> & tree, Stack * topologicalO
         root2 = tree.at(root).pop();
         if(!explored[root2]) {
             // recursively invoke
-            dfsConnections(tree, topologicalOrder, connectionList, idList, explored, root2, idCounter, kernelPairs);
+            dfsConnections(tree, topologicalOrder, connectionList, idList, explored, root2, idCounter, kernelPairs, kernelExplored);
         }
-        else {  // add to kernel
-            if(idList[root2] != idCounter) {
+        else {  // add to kernel graph
+            if(idList[root2] != idCounter && !kernelExplored[idList[root2]]) {
                 kernelPairs.emplace_back(idCounter, idList[root2]);
+                kernelExplored[idList[root2]] = true;
             }
 
         }

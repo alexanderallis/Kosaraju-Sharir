@@ -5,7 +5,7 @@
 #include "adjacency_list.h"
 #include "LinkedList.h"
 
-std::vector<LinkedList> makeAdjacencyList(const std::vector<std::pair<int, int>>& pairs) {
+std::vector<LinkedList> makeAdjacencyList(const std::vector<std::pair<int, int>>& pairs, int numberOfVertices) {
 
 
     unsigned int listSize = pairs.size();
@@ -18,7 +18,7 @@ std::vector<LinkedList> makeAdjacencyList(const std::vector<std::pair<int, int>>
         if(pairs.at(i).second > max) max = pairs.at(i).second;
     }
 
-    std::vector<LinkedList> adjList(max + 1);
+    std::vector<LinkedList> adjList(numberOfVertices);
 
     for(int i = 0; i < listSize; i++) {
         index = pairs.at(i).first;

@@ -13,7 +13,7 @@ int dfsPostorder(std::vector<LinkedList> &tree, Stack *topologicalOrder, bool *e
 
 int dfsSearch(std::vector<LinkedList> &, Stack *, std::vector<LinkedList> *, int *, int, std::vector<std::pair<int, int>> &);
 
-LinkedList * dfsConnections(std::vector<LinkedList> &, Stack *, LinkedList *, int *, bool *, int, int, std::vector<std::pair<int, int>> &);
+LinkedList * dfsConnections(std::vector<LinkedList> &, Stack *, LinkedList *, int *, bool *, int, int, std::vector<std::pair<int, int>> &, bool *);
 
 std::vector<std::pair<int, int>> getPairsOfGReverse(std::vector<std::pair<int, int>> &);
 
